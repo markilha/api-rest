@@ -49,7 +49,7 @@ router.patch("/", (req, res, next) => {
   //DELETA UM PRODUTO
   router.delete("/", (req, res, next) => {
     res.status(201).send({
-      mensagem: "Usando o DELETE dentro da rotas de produtos",
+      mensagem: "Excluindo produtos",
     });
   });
 
