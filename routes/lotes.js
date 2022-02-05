@@ -1,70 +1,67 @@
 const express = require("express");
 const router = express.Router();
-const conn = require('../bd');
+const conn = require("../bd");
 
-
-
-
-// //RETORNA TODOS OS PRODUTOS
-// router.get("/", (req, res, next) => {
-//   res.status(200).send({
-//     mensagem: "Usando o GET dentro da rotas de produtos",
-//   });
-// });
-
-
-//INSERI LOTES
-router.post("/", (req, res, next) => {
-  
-  const { imoset, imoqua, imolot } = req.body;
-  let stringQuery = `INSERT INTO tblimo (imoset,imoqua,imolot) VALUES ('${imoset}','${imoqua}','${imolot}')`;
-  conn.query(stringQuery, (error, results)=>{
-    console.log(conn.status)
+router.get("/", (req, res, next) => {
+  conn.query("SELECT * FROM tblimo;", (error, results) => {
     conn.end;
-    if(error){
-     return res.status(500).send({
-        error: error,
-        response: null
-      })
+    if (error) {
+      return res.status(500).send({ error: error });
     }
-    res.status(201).send({
-      mensagem: "Lote inserido com sucesso!!!",
-      loteCriado: results.imoid
-    });
-  })  
+    res.status(200).send({ response: results.rows });
+  });
 });
 
+router.post("/", (req, res, next) => {
+  const { imoset, imoqua, imolot } = req.body;
+  let stringQuery = `INSERT INTO tblimo (imoset,imoqua,imolot) VALUES ('${imoset}','${imoqua}','${imolot}')`;
+  conn.query(stringQuery, (error, results) => {
+    conn.end;
+    if (error) {
+      return res.status(500).send({ error: error });
+    }
+    res.status(201).send({ mensagem: "Lote Inserido com sucesso!!!" });
+  });
+});
 
-// //RETORNA PRODUTO
-// router.get("/:id_produto", (req, res, next) => {
-//   const id = req.params.id_produto;
-//   if (id === "especial") {
-//     res.status(200).send({
-//       mensagem: "Voce descobriu o id especial",
-//       id: id,
-//     });
-//   } else {
-//     res.status(200).send({
-//       mensagem: "Voce passou um id: ",
-//       id: id,
-//     });
-//   }
-// });
+router.get("/:id_lote", (req, res, next) => {
+  const id = req.params.id_lote;
+  conn.query(`SELECT * FROM tblimo WHERE imoid = ${id};`, (error, results) => {
+    conn.end;
+    if (error) {
+      return res.status(500).send({ error: error });
+    }
+    res.status(200).send({ response: results.rows });
+  });
+});
 
+router.patch("/", (req, res, next) => {
+  const { imoid, imoset, imoqua, imolot } = req.body;
+  let stringQuery = `UPDATE tblimo SET 
+  imoset = '${imoset}',
+  imoqua = '${imoqua}',
+  imolot = '${imolot}'
+  WHERE imoid = ${imoid}`;
+                          
+  conn.query(stringQuery, (error, results) => {
+    conn.end;
+    if (error) {
+      return res.status(500).send({ error: error });
+    }
+    res.status(201).send({ mensagem: "Lote Atualizado com sucesso!!!" });
+  });
+});
 
-// //ALTERA UM PRODUTO
-// router.patch("/", (req, res, next) => {
-//     res.status(201).send({
-//       mensagem: "Usando o PATCH dentro da rotas de produtos",
-//     });
-//   });
-
-
-//   //DELETA UM PRODUTO
-//   router.delete("/", (req, res, next) => {
-//     res.status(201).send({
-//       mensagem: "Excluindo produtos",
-//     });
-//   });
+router.delete("/",(req,res,next)=>{
+  const id = req.body.imoid;
+  let stringQuery = `DELETE FROM tblimo WHERE imoid = ${id};`;
+  conn.query(stringQuery, (error, results) => {
+    conn.end;
+    if (error) {
+      return res.status(500).send({ error: error });
+    }
+    res.status(201).send({ mensagem: "Lote Deletado com sucesso!!!" });
+  });
+});
 
 module.exports = router;
