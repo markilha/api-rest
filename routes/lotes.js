@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const conn = require("../bd");
+const login = require('./middleware/login');
 
-router.get("/", (req, res, next) => {
+router.get("/", login.obrigatorio, (req, res, next) => {
+  console.log(req.usuario)
   conn.query("SELECT * FROM tblimo;", (error, results) => {
     conn.end;
     if (error) {
