@@ -30,7 +30,7 @@ app.use("/usuarios",rotaUsers);
 
 
 app.use((req, res, next) => {
-  const erro = new Error("Ops! Não encontrado...");
+  const erro = new Error("Ops! Página não encontrado...");
   erro.status = 404;
   next(erro);
 });
