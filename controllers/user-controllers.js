@@ -4,15 +4,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 
-exports.getUsers = (req, res, next) => { 
-  conn.query("SELECT * FROM tbluser;", (error, results) => {
-    conn.end;
-    if (error) {
-      return res.status(500).send({ error: error });
-    }
-    const response = {
-      quantidade: results.rows.length,
-      lotes: results.rows.map((user) => {
+exports.getUsers = (req, res, next) => {
+  conn
+  .execute("SELECT * FROM tbluser;")
+  .then((results) => {    
+        const response = {
+      quantidade: results.length,
+      lotes: results.map((user) => {
         return {
           usuarioId: user.userid,
           email: user.useremail,         
@@ -24,81 +22,67 @@ exports.getUsers = (req, res, next) => {
         };
       }),
     };
-    return res.status(200).send({ response });
+    return res.status(200).send({ response });     
+      
+  })
+  .catch((err) => {
+    return res.status(401).send({ message: "Opss, ocorreu um erro!!!" });
   });
+
 }
 
 exports.postUsers = (req, res, next) => {
   const { usernome, usersenha, userniv, useremail } = req.body;
-  conn.query(
-    `SELECT * FROM tbluser WHERE useremail = '${useremail}'`,
-    (error, result) => {
-      if (error) {
-        return res.status(500).send({ error: error });
-      }
-      if (result.rows.length > 0) {
-        return res.status(409).send({ message: "Email já cadastrado!!!" });
-      } else {
-        bcrypt.hash(usersenha, 5, (errorBcrypt, hash) => {
-          if (errorBcrypt) {
-            return res.status(500).send({ error: errorBcrypt });
-          }
-          let stringQuery = `INSERT INTO tbluser (usernome,usersenha,userniv,useremail) VALUES ('${usernome}','${hash}','${userniv}','${useremail}')`;
-          console.log(stringQuery);
-          conn.query(stringQuery, (error, result) => {
-            conn.end;
-            if (error) {
-              return res.status(500).send({ error: error });
-            }
+  conn.execute("SELECT * FROM tbluser;").then((results) => {  
+    bcrypt.hash(usersenha, 5, (errorBcrypt, hash) => {
+    if (errorBcrypt) { return res.status(500).send({ error: errorBcrypt });}
+      let stringQuery = `INSERT INTO tbluser (usernome,usersenha,userniv,useremail) VALUES ('${usernome}','${hash}','${userniv}','${useremail}')`;
+      console.log(stringQuery);
+      conn.execute(stringQuery).then((dados) => { 
+       
             const response = {
-              message: "Usuário criado com sucesso!!!",
-              usuarioCriado: {
-                userid: result.rows.userid,
-                user: usernome,
-                email: useremail,
-              },
-            };
-            return res.status(201).send(response);
-          });
-        });
-      }
-    }
-  );
+                    message: "Usuário criado com sucesso!!!",
+                    usuarioCriado: {
+                      userid: dados.userid,
+                      user: usernome,
+                      email: useremail,
+                    },
+                  };
+                  return res.status(201).send(response);        
+      })
+      .catch((err) => {
+        return res.status(401).send({ message: "Opss2, ocorreu um erro!!!" });
+      });
+      
+    });       
+  })
+  .catch((err) => {
+    return res.status(401).send({ message: "Opss, ocorreu um erro!!!" });
+  });
 }
 
 exports.authUser = (req, res, next) => {
   let stringQuery = `SELECT * FROM tbluser WHERE useremail = '${req.body.useremail}'`;
-  conn.query(stringQuery, (error, results) => {
-    conn.end;
-    if (error) {
-      return res.status(500).send({ error: error });
-    }
-    if (results.rows.length < 1) {
-      return res.status(401).send({ message: "Falha na autenticação!!!" });
-    }
+  conn
+  .execute(stringQuery)
+  .then((results) => {
+        bcrypt.compare(req.body.usersenha, results[0].usersenha, (err, result) => {
 
-    bcrypt.compare(
-      req.body.usersenha,
-      results.rows[0].usersenha,
-      (err, result) => {
-        if (err) {
-          return res.status(500).send({ error: err });
-        }
+        if (err) { return res.status(500).send({ error: err });}
+
         if (result) {
           const token = jwt.sign(
             {
-              id_usuario: results.rows[0].userid,
-              email: results.rows[0].useremail,
+              id_usuario: results[0].userid,
+              email: results[0].useremail,
             },
             process.env.JWT_KEY,
             {
-              expiresIn: "1h",
+              expiresIn: "8h",
             }
           );
 
-          return res
-            .status(200)
-            .send({ 
+          return res.status(200).send({ 
               message: "Usuário autenticado com sucesso!!!",
               token: token
              });
@@ -107,5 +91,10 @@ exports.authUser = (req, res, next) => {
         }
       }
     );
+      
+  })
+  .catch((err) => {
+    return res.status(401).send({ message: "Falha na autenticação!!!" });
   });
+
 }
