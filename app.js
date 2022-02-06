@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
 const rotaLotes = require("./routes/lotes");
+const rotaUsers = require("./routes/users");
 
 
 app.use(morgan("dev"));
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/lotes", rotaLotes);
+app.use("/usuarios",rotaUsers);
 
 
 app.use((req, res, next) => {
