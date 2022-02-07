@@ -6,7 +6,7 @@ const login = require('../routes/middleware/login');
 
 router.get("/cadastro",login.obrigatorio, UserController.getUsers);
 
-router.post("/cadastro", login.obrigatorio, UserController.postUsers);
+router.post("/cadastro", UserController.postUsers);
 
 router.post("/login", UserController.authUser);
 

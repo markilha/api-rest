@@ -1,6 +1,6 @@
 const { Pool } = require("pg");
 
- var connection = new Pool({
+ var connection = new Pool({  
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,

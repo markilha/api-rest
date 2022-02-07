@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 exports.obrigatorio =(req,res,next)=>{
-    const token = req.headers.authorization.split(' ')[1];    
+      
     try{
+        const token = req.headers.authorization.split(' ')[1];  
         const decode = jwt.verify(token, process.env.JWT_KEY);
         req.usuario = decode;
         next();
@@ -14,8 +15,9 @@ exports.obrigatorio =(req,res,next)=>{
 }
 
 exports.opcional =(req,res,next)=>{
-    const token = req.headers.authorization.split(' ')[1];    
+      
     try{
+        const token = req.headers.authorization.split(' ')[1];  
         const decode = jwt.verify(token, process.env.JWT_KEY);
         req.usuario = decode;
         next();
