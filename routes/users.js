@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const conn = require("../bd");
 const UserController = require('../controllers/user-controllers');
 const login = require('../routes/middleware/login');
 

@@ -13,25 +13,12 @@ app.use(bodyParser.urlencoded({ extended: false })); //apenas dados simpres
 app.use(bodyParser.json()); //jsona de entrada jsonno
 
 app.use((req, res,next)=>{
-  res.header("Access-Control-Allow-Origin","*")
+  res.header("Access-Control-Allow-Origin","*");
+  res.header("Access-Control-Allow-Headers","Content-Type");
   app.use(cors());
   next();
-
 })
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Header",
-//     "Origin, X-Requerested-With, Content-Type, Accept, Authorization"
-//   );
-
-//   if (req.method === "OPTIONS") {
-//     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
-//     return res.status(200).send({});
-//   }
-//   next();
-// });
 
 app.use("/lotes", rotaLotes);
 app.use("/usuarios",rotaUsers);
