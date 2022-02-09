@@ -9,10 +9,12 @@ exports.getUsers = async (req, res, next) => {
     const results = await conn.execute("SELECT * FROM tbluser;");
     const response = {
       quantidade: results.length,
-      lotes: results.map((user) => {
+      usuarios: results.map((user) => {
         return {
-          usuarioId: user.userid,
-          email: user.useremail,
+          id: user.userid,
+          nome: user.usernome,
+          email: user.useremail,  
+          nivel: user.userniv,           
           request: {
             tipo: "GET",
             descricao: "Retorna todos usuarios cadastradados",
