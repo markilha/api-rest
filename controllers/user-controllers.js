@@ -83,7 +83,7 @@ exports.authUser = async (req, res, next) => {
         return res.status(200).send({
           id:results[0].userid,
           nome:results[0].usernome,
-          emal:results[0].useremail,
+          email:results[0].useremail,
           nivel:results[0].userniv,
           token: token
         });
