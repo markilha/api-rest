@@ -97,3 +97,47 @@ exports.authUser = async (req, res, next) => {
   }
 
 }
+
+exports.getUserId = async (req, res, next) => {
+  try {
+    const id = req.params.id_user;
+    const result = await conn.execute(`SELECT * FROM tbluser WHERE userid = ${id};`);
+    const response = {
+      usuario: {
+        id: result[0].userid,
+        nome: result[0].usernome,
+        email: result[0].useremail,
+        nivel: result[0].userniv       
+      }
+    };
+    return res.status(200).send(response);
+  } catch (error) {
+    return res.status(500).send({ message: `Erro: ${error}` });
+  }
+};
+
+exports.pathUser = async (req, res, next) => {
+  try {
+    const { userid, usernome, useremail, usersenha,userniv } = req.body;
+
+    bcrypt.hash(usersenha, 5, async (errorBcrypt, hash) => {
+      if (errorBcrypt) { return res.status(500).send({ error: errorBcrypt }); }
+       let stringQuery = `UPDATE tbluser SET 
+        usernome = '${usernome}',
+        useremail = '${useremail}',
+        usersenha = '${hash}',
+        userniv = '${userniv}'
+        WHERE userid = ${userid}`;
+        console.log(stringQuery)
+        const result = await conn.execute(stringQuery);
+
+        const response = {
+          message: "Usuário Atualizado com sucesso"
+        }
+        return res.status(202).send(response);
+    });    
+   
+  } catch (error) {
+    return res.status(500).send({ message: `Erro: ${error}` });
+  }
+};

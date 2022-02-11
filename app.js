@@ -14,7 +14,8 @@ app.use(bodyParser.json()); //jsona de entrada jsonno
 
 app.use((req, res,next)=>{
   res.header("Access-Control-Allow-Origin","*");
-  res.header("Access-Control-Allow-Headers","Content-Type");
+  res.header("Access-Control-Allow-Headers","Content-Type, Authorization");
+  res.header("Access-Control-Allow-Methods","*"); 
   app.use(cors());
   next();
 })
