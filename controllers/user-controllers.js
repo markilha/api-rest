@@ -141,3 +141,18 @@ exports.pathUser = async (req, res, next) => {
     return res.status(500).send({ message: `Erro: ${error}` });
   }
 };
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const id = req.body.userid;
+
+    let stringQuery = `DELETE FROM tbluser WHERE userid = ${id};`;
+
+    const result = await conn.execute(stringQuery);
+    const response = {
+      message: "Usuario deletado com sucesso",
+    };
+    return res.status(201).send(response);
+  } catch (error) {
+    return res.status(500).send({ message: `Erro: ${error}` });
+  }
+};
