@@ -3,20 +3,15 @@ const conn = require("../bd");
 
 exports.getLotes = async (req, res, next) => {
   try {
-    const results = await conn.execute("SELECT * FROM tblimo;");
+    const results = await conn.execute("SELECT * FROM tblimo;");    
     const response = {
       quantidade: results.length,
-      lotes: results.map((lote) => {
+      lote: results.map((lote) => {
         return {
           imoid: lote.imoid,
           imoset: lote.imoset,
           imoqua: lote.imoqua,
-          imolot: lote.imolot,
-          request: {
-            tipo: "GET",
-            descricao: "Retorna todos lotes cadastradados",
-            url: `http://localhost:3000/lotes/${lote.imoid}`,
-          },
+          imolot: lote.imolot        
         };
       }),
     };
@@ -25,9 +20,6 @@ exports.getLotes = async (req, res, next) => {
   } catch (error) {
     return res.status(500).send({ message: `Erro: ${error}` });
   }
-
-
-
 };
 
 exports.getLoteId = async (req, res, next) => {
@@ -62,20 +54,12 @@ exports.pathLote = async (req, res, next) => {
         imolot = '${imolot}'
         WHERE imoid = ${imoid}`;
     const result = await conn.execute(stringQuery);
-    const response = {
-      message: "Lote atualizado com sucesso",
-      lote: {
+    const response = { 
         id: imoid,
         setor: imoset,
         quadra: imoqua,
-        lote: imolot,
-        request: {
-          tipo: "GET",
-          descricao: "Lote atualizado com sucesso!!!",
-          url: `http://localhost:3000/lotes/${imoid}`,
-        },
-      },
-    };
+        lote: imolot       
+      };   
     return res.status(202).send(response);
   } catch (error) {
     return res.status(500).send({ message: `Erro: ${error}` });

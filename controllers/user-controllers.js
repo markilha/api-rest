@@ -142,10 +142,10 @@ exports.pathUser = async (req, res, next) => {
   }
 };
 exports.deleteUser = async (req, res, next) => {
-  try {
-    const id = req.body.userid;
-
+  try {   
+    const id = req.params.id_user; 
     let stringQuery = `DELETE FROM tbluser WHERE userid = ${id};`;
+    console.log(stringQuery)
 
     const result = await conn.execute(stringQuery);
     const response = {

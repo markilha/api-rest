@@ -10,6 +10,6 @@ router.post("/cadastro", UserController.postUsers);
 router.post("/login", UserController.authUser);
 router.get("/cadastro/:id_user",login.obrigatorio, UserController.getUserId);
 router.patch("/cadastro",login.obrigatorio, UserController.pathUser);
-router.delete("/cadastro",login.obrigatorio, UserController.deleteUser);
+router.delete("/cadastro/:id_user",login.obrigatorio, UserController.deleteUser);
 
 module.exports = router;

@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const conn = require("../bd");
 const login = require('./middleware/login');
 const LoteController = require("../controllers/lotes-controllers")
 
