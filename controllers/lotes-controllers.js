@@ -17,21 +17,8 @@ exports.getLotes = async (req, res, next) => {
 
 exports.getLoteId = async (req, res, next) => {
   try {
-    const id = req.params.id_lote;
-    const result = await conn.execute(`SELECT * FROM tblimo WHERE imoid = ${id};`);
-    const response = {
-      lote: {
-        id: result[0].imoid,
-        setor: result[0].imoset,
-        quadra: result[0].imoqua,
-        lote: result[0].imolot,
-        request: {
-          tipo: "GET",
-          descricao: "Retorna um lote especifico!!!",
-          url: `http://localhost:3000/lotes}`,
-        },
-      },
-    };
+    const id = req.params.id;
+    const response = await conn.execute(`SELECT * FROM tblimo WHERE imoid = ${id};`); 
     return res.status(200).send(response);
   } catch (error) {
     return res.status(500).send({ message: `Erro: ${error}` });
@@ -61,21 +48,11 @@ exports.pathLote = async (req, res, next) => {
 
 exports.deleteLote = async (req, res, next) => {
   try {
-    const id = req.body.imoid;
+    const id = req.params.id;
     let stringQuery = `DELETE FROM tblimo WHERE imoid = ${id};`;
     const result = await conn.execute(stringQuery);
     const response = {
-      message: "Lote deletado com sucesso",
-      request: {
-        tipo: "POST",
-        descricao: "Lote deletado com sucesso!!!",
-        url: `http://localhost:3000/lotes`,
-        body: {
-          imoid: "number",
-          imoset: "string",
-          imoqua: "string",
-        },
-      },
+      message: "Lote deletado com sucesso"      
     };
     return res.status(201).send(response);
   } catch (error) {
