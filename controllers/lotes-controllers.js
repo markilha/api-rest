@@ -2,21 +2,14 @@ const express = require("express");
 const conn = require("../bd");
 
 exports.getLotes = async (req, res, next) => {
-  try {
-    const results = await conn.execute("SELECT * FROM tblimo;");    
-    const response = {
-      quantidade: results.length,
-      lote: results.map((lote) => {
-        return {
-          imoid: lote.imoid,
-          imoset: lote.imoset,
-          imoqua: lote.imoqua,
-          imolot: lote.imolot        
-        };
-      }),
-    };
+  const {pesquisa} = req.body;
+  console.log(pesquisa)
+  try {   
+    const results = await conn.execute(pesquisa);  
+    const response ={
+      lotes: results
+    } 
     return res.status(200).send({ response });
-
   } catch (error) {
     return res.status(500).send({ message: `Erro: ${error}` });
   }

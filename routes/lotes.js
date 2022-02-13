@@ -4,6 +4,7 @@ const login = require('./middleware/login');
 const LoteController = require("../controllers/lotes-controllers")
 
 router.get("/", login.obrigatorio,LoteController.getLotes);
+router.post("/", login.obrigatorio,LoteController.getLotes);
 
 router.get("/:id_lote",login.obrigatorio, LoteController.getLoteId);
 
