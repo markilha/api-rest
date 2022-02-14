@@ -27,24 +27,18 @@ exports.getLoteId = async (req, res, next) => {
 
 exports.pathLote = async (req, res, next) => {
   try {
-    const { imoid, imoset, imoqua, imolot } = req.body;
-    let stringQuery = `UPDATE tblimo SET 
-        imoset = '${imoset}',
-        imoqua = '${imoqua}',
-        imolot = '${imolot}'
-        WHERE imoid = ${imoid}`;
-    const result = await conn.execute(stringQuery);
+    const { query} = req.body; 
+    const result = await conn.execute(query);
     const response = { 
-        id: imoid,
-        setor: imoset,
-        quadra: imoqua,
-        lote: imolot       
+      message: "Cadastro Atualizado com Sucesso!!!"          
       };   
-    return res.status(202).send(response);
+    return res.status(202).send(response.message);
+   
   } catch (error) {
     return res.status(500).send({ message: `Erro: ${error}` });
   }
 };
+
 
 exports.deleteLote = async (req, res, next) => {
   try {
