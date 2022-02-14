@@ -28,6 +28,7 @@ exports.getLoteId = async (req, res, next) => {
 exports.pathLote = async (req, res, next) => {
   try {
     const { query} = req.body; 
+    console.log(query)
     const result = await conn.execute(query);
     const response = { 
       message: "Cadastro Atualizado com Sucesso!!!"          
