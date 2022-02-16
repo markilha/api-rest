@@ -2,8 +2,7 @@ const express = require("express");
 const conn = require("../bd");
 
 exports.getLotes = async (req, res, next) => {
-  const {pesquisa} = req.body;
-  console.log(pesquisa)
+  const {pesquisa} = req.body; 
   try {   
     const results = await conn.execute(pesquisa);  
     const response ={
