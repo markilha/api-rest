@@ -61,8 +61,13 @@ exports.postUsers = async (req, res, next) => {
 }
 
 exports.authUser = async (req, res, next) => {
-  try {    
+  try { 
+     const stringQuery =  `SELECT * FROM tbluser WHERE useremail = '${req.body.useremail}'`;
+     console.log(stringQuery)
+   
     const results = await conn.execute(`SELECT * FROM tbluser WHERE useremail = '${req.body.useremail}'`); 
+    console.log(results)
+
     bcrypt.compare(req.body.usersenha, results[0].usersenha, (err, result) => {
       if (err) { return res.status(500).send({ error: err }); }
       if (result) {
