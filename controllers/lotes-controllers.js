@@ -2,9 +2,9 @@ const express = require("express");
 const conn = require("../bd");
 
 exports.getLotes = async (req, res, next) => {
-  const {pesquisa} = req.body; 
+  const {query} = req.body; 
   try {   
-    const results = await conn.execute(pesquisa);  
+    const results = await conn.execute(query);  
     const response ={
       lotes: results
     } 
@@ -26,7 +26,7 @@ exports.getLoteId = async (req, res, next) => {
 
 exports.pathLote = async (req, res, next) => {
   try {
-    const { query} = req.body; 
+    const {query} = req.body;    
     console.log(query)
     const result = await conn.execute(query);
     const response = { 
