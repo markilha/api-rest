@@ -3,11 +3,11 @@ const router = express.Router();
 const login = require('./middleware/login');
 const LoteController = require("../controllers/lotes-controllers")
 
-router.get("/", login.obrigatorio,LoteController.getLotes);
-router.post("/", login.obrigatorio,LoteController.getLotes);
-router.get("/:id",login.obrigatorio, LoteController.getLoteId);
+router.get("/",LoteController.getLotes);
+router.post("/",LoteController.getLotes);
+router.get("/:id",LoteController.getLoteId);
 
-router.patch("/",login.obrigatorio, LoteController.pathLote);
-router.delete("/:id",login.obrigatorio, LoteController.deleteLote);
+router.patch("/", LoteController.pathLote);
+router.delete("/:id", LoteController.deleteLote);
 
 module.exports = router;
