@@ -3,7 +3,6 @@ const conn = require("../bd");
 
 exports.getLotes = async (req, res, next) => {
   const {query} = req.body;
-  console.log(query) 
   try {   
     const results = await conn.execute(query);  
     const response ={
