@@ -3,7 +3,7 @@ const router = express.Router();
 const UserController = require('../controllers/user-controllers');
 const login = require('../routes/middleware/login');
 
-router.get("/cadastro",login.obrigatorio, UserController.getUsers);
+router.get("/cadastro", UserController.getUsers);
 
 router.post("/cadastro", UserController.postUsers);
 

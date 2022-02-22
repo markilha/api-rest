@@ -31,7 +31,7 @@ exports.getUsers = async (req, res, next) => {
 
 exports.postUsers = async (req, res, next) => {
   try {
-    const { usernome, usersenha, userniv, useremail } = req.body;
+    const { query } = req.body;
     const results = await conn.execute("SELECT * FROM tbluser;");
 
     bcrypt.hash(usersenha, 5, (errorBcrypt, hash) => {
@@ -62,11 +62,11 @@ exports.postUsers = async (req, res, next) => {
 
 exports.authUser = async (req, res, next) => {
   try { 
-     const stringQuery =  `SELECT * FROM tbluser WHERE useremail = '${req.body.useremail}'`;
-     console.log(stringQuery)
+     const stringQuery =  `SELECT * FROM tbluser WHERE useremail = '${req.body.useremail}'`;  
+   
    
     const results = await conn.execute(`SELECT * FROM tbluser WHERE useremail = '${req.body.useremail}'`); 
-    console.log(results)
+ 
 
     bcrypt.compare(req.body.usersenha, results[0].usersenha, (err, result) => {
       if (err) { return res.status(500).send({ error: err }); }
